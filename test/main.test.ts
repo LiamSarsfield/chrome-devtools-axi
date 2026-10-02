@@ -479,6 +479,11 @@ describe("main", () => {
       { format: undefined, input: "v1.\nshot.png", output: "v1.\nshot.webp" },
       {
         format: undefined,
+        input: "v1.\nEmulating shot.png",
+        output: "v1.\nEmulating shot.webp",
+      },
+      {
+        format: undefined,
         input: "v1.png.\nshot.png",
         output: "v1.png.\nshot.webp",
       },
