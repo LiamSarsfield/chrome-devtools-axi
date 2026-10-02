@@ -476,9 +476,31 @@ describe("main", () => {
     { format: "webp", input: "shot.jpeg", output: "shot.webp" },
     { format: undefined, input: "shot\nname.png", output: "shot\nname.webp" },
     { format: undefined, input: "v1.\nshot.png", output: "v1.\nshot.webp" },
-  ])(
-    "reports the canonical MCP saved path for format $format",
-    async ({ format, input, output }) => {
+    {
+      format: undefined,
+      input: "v1.png.\nshot.png",
+      output: "v1.png.\nshot.webp",
+    },
+    {
+      format: "jpeg",
+      input: "v1.jpeg.\nshot.png",
+      output: "v1.jpeg.\nshot.jpeg",
+    },
+    {
+      format: "webp",
+      input: "v1.webp.\nshot.png",
+      output: "v1.webp.\nshot.webp",
+    },
+  ].flatMap((entry) => [
+    { ...entry, suffix: "" },
+    {
+      ...entry,
+      suffix:
+        '\nEmulating viewport: {"width":390,"height":844}\nEmulating color scheme: dark\nEmulating network conditions: Offline\nDefault navigation timeout set to 30000 ms\nEmulating user agent: Bot/shot.png.',
+    },
+  ]))(
+    "reports the canonical MCP saved path for $input with format $format and suffix $suffix",
+    async ({ format, input, output, suffix }) => {
       const directory = mkdtempSync(
         join(tmpdir(), "chrome-devtools-axi-shot-"),
       );
@@ -497,7 +519,7 @@ describe("main", () => {
           expect(requested).toBe(resolve(directory, "linked", input));
           const written = join(realpathSync(linkedDirectory), output);
           writeFileSync(written, "fake-screenshot");
-          return `Took a screenshot of the current page's viewport.\nSaved screenshot to ${written}.`;
+          return `Took a screenshot of the current page's viewport.\nSaved screenshot to ${written}.${suffix}`;
         });
 
         const argv = ["screenshot", join("linked", input)];

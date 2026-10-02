@@ -635,7 +635,7 @@ function parseScreenshotOutputPath(result: string): string {
   // Assumes upstream writes its Saved line before caller- or page-controlled text;
   // otherwise a page-controlled line could be reported as the path.
   const match = result.match(
-    /^Saved screenshot to ([\s\S]+?\.(?:png|jpeg|webp))\.\s*$/m,
+    /(?:^|\n)Saved screenshot to ([\s\S]+?\.(?:png|jpeg|webp))\.(?=\s*$|\s*\nEmulating )/,
   );
   if (!match) {
     throw new CdpError(
