@@ -470,35 +470,37 @@ describe("main", () => {
     },
   );
 
-  it.each([
-    { format: undefined, input: "shot.png", output: "shot.webp" },
-    { format: "jpeg", input: "shot.webp", output: "shot.jpeg" },
-    { format: "webp", input: "shot.jpeg", output: "shot.webp" },
-    { format: undefined, input: "shot\nname.png", output: "shot\nname.webp" },
-    { format: undefined, input: "v1.\nshot.png", output: "v1.\nshot.webp" },
-    {
-      format: undefined,
-      input: "v1.png.\nshot.png",
-      output: "v1.png.\nshot.webp",
-    },
-    {
-      format: "jpeg",
-      input: "v1.jpeg.\nshot.png",
-      output: "v1.jpeg.\nshot.jpeg",
-    },
-    {
-      format: "webp",
-      input: "v1.webp.\nshot.png",
-      output: "v1.webp.\nshot.webp",
-    },
-  ].flatMap((entry) => [
-    { ...entry, suffix: "" },
-    {
-      ...entry,
-      suffix:
-        '\nEmulating viewport: {"width":390,"height":844}\nEmulating color scheme: dark\nEmulating network conditions: Offline\nDefault navigation timeout set to 30000 ms\nEmulating user agent: Bot/shot.png.',
-    },
-  ]))(
+  it.each(
+    [
+      { format: undefined, input: "shot.png", output: "shot.webp" },
+      { format: "jpeg", input: "shot.webp", output: "shot.jpeg" },
+      { format: "webp", input: "shot.jpeg", output: "shot.webp" },
+      { format: undefined, input: "shot\nname.png", output: "shot\nname.webp" },
+      { format: undefined, input: "v1.\nshot.png", output: "v1.\nshot.webp" },
+      {
+        format: undefined,
+        input: "v1.png.\nshot.png",
+        output: "v1.png.\nshot.webp",
+      },
+      {
+        format: "jpeg",
+        input: "v1.jpeg.\nshot.png",
+        output: "v1.jpeg.\nshot.jpeg",
+      },
+      {
+        format: "webp",
+        input: "v1.webp.\nshot.png",
+        output: "v1.webp.\nshot.webp",
+      },
+    ].flatMap((entry) => [
+      { ...entry, suffix: "" },
+      {
+        ...entry,
+        suffix:
+          '\nEmulating viewport: {"width":390,"height":844}\nEmulating color scheme: dark\nEmulating network conditions: Offline\nDefault navigation timeout set to 30000 ms\nEmulating user agent: Bot/shot.png.',
+      },
+    ]),
+  )(
     "reports the canonical MCP saved path for $input with format $format and suffix $suffix",
     async ({ format, input, output, suffix }) => {
       const directory = mkdtempSync(
